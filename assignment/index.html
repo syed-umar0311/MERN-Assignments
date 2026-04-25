@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Assignment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .box {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 25px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    .links {
+      margin-top: 25px;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 8px;
+      padding: 12px 18px;
+      text-decoration: none;
+      color: white;
+      background-color: #0078d4;
+      border-radius: 6px;
+    }
+
+    .links a:hover {
+      background-color: #005ea6;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>JavaScript Assignments</h1>
+
+    <div class="links">
+      <a href="#" onclick="runAssignment1()">Assignment 1</a>
+      <a href="#" onclick="runAssignment3()">Assignment 2</a>
+      <a href="#" onclick="runAssignment5()">Assignment 3</a>
+      <a href="#" onclick="runBonusAssignment()">Bonus Assignment</a>
+    </div>
+  </div>
+
+  <script>
+    function runAssignment1() {
+      var name = prompt("Assignment 1\nEnter your name:");
+      var age = prompt("Assignment 1\nEnter your age:");
+      var city = prompt("Assignment 1\nEnter your city:");
+
+      if (name !== null && age !== null && city !== null) {
+        var studentMessage = "Hello " + name + ", you are " + age + " years old and live in " + city + ".";
+
+        if (Number(age) >= 18) {
+          studentMessage += "\nYou are an adult.";
+        } else {
+          studentMessage += "\nYou are a minor.";
+        }
+
+        alert(studentMessage);
+      }
+    }
+
+    function runAssignment3() {
+      var num1 = prompt("Assignment 3\nEnter first number:");
+      var num2 = prompt("Assignment 3\nEnter second number:");
+
+      if (num1 !== null && num2 !== null) {
+        var firstNumber = Number(num1);
+        var secondNumber = Number(num2);
+        var calculatorMessage =
+          "Addition: " + (firstNumber + secondNumber) + "\n" +
+          "Subtraction: " + (firstNumber - secondNumber) + "\n" +
+          "Multiplication: " + (firstNumber * secondNumber) + "\n";
+
+        if (secondNumber === 0) {
+          calculatorMessage += "Division: Cannot divide by zero";
+        } else {
+          calculatorMessage += "Division: " + (firstNumber / secondNumber);
+        }
+
+        alert(calculatorMessage);
+      }
+    }
+
+    function runAssignment5() {
+      var username = prompt("Assignment 5\nEnter username:");
+      var password = prompt("Assignment 5\nEnter password:");
+      var loginMessage = "";
+
+      if (username !== null && password !== null) {
+        if (username === "admin" && password === "1234") {
+          loginMessage = "Welcome Admin";
+        } else if (username === "teacher" && password === "1111") {
+          loginMessage = "Welcome Teacher";
+        } else if (username === "student" && password === "2222") {
+          loginMessage = "Welcome Student";
+        } else {
+          loginMessage = "Invalid Credentials";
+        }
+
+        alert(loginMessage);
+      }
+    }
+
+    function runBonusAssignment() {
+      var systemNumber = 5;
+      var guess = prompt("Bonus Assignment\nGuess the number:");
+
+      if (guess !== null) {
+        if (Number(guess) === systemNumber) {
+          alert("You Win");
+        } else {
+          alert("Try Again");
+        }
+      }
+    }
+  </script>
+</body>
+</html>
