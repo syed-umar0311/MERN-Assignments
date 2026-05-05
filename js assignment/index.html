@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>JS Assignments</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 20px;
+    }
+    h2 {
+        color: #333;
+    }
+    .card {
+        background: white;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input, button {
+        padding: 8px;
+        margin: 5px 0;
+        width: 100%;
+    }
+    button {
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0056b3;
+    }
+    .output {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<h1>JavaScript Assignments System</h1>
+
+<!-- Assignment 1 -->
+<div class="card">
+    <h2>Assignment 1: Shopping Cart</h2>
+    <input type="number" id="price" placeholder="Enter total price">
+    <button onclick="calculateCart()">Calculate</button>
+    <div class="output" id="cartOutput"></div>
+</div>
+
+<!-- Assignment 2 -->
+<div class="card">
+    <h2>Assignment 2: Student Result</h2>
+    <input type="number" id="marks" placeholder="Enter marks">
+    <button onclick="checkResult()">Check Result</button>
+    <div class="output" id="resultOutput"></div>
+</div>
+
+<!-- Assignment 3 -->
+<div class="card">
+    <h2>Assignment 3: City Search</h2>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="searchCity()">Search</button>
+    <div class="output" id="cityOutput"></div>
+</div>
+
+<!-- Assignment 4 -->
+<div class="card">
+    <h2>Assignment 4: Array Operations</h2>
+    <button onclick="arrayOps()">Run Operations</button>
+    <div class="output" id="arrayOutput"></div>
+</div>
+
+<!-- Assignment 5 -->
+<div class="card">
+    <h2>Assignment 5: Product Search</h2>
+    <input type="text" id="product" placeholder="Enter product name">
+    <button onclick="searchProduct()">Search</button>
+    <div class="output" id="productOutput"></div>
+</div>
+
+<script>
+// Assignment 1
+function calculateCart() {
+    let price = parseFloat(document.getElementById("price").value);
+    let tax = price * 0.1;
+    let total = price + tax;
+    let delivery = total > 1000 ? "Free Delivery" : "Paid Delivery";
+
+    document.getElementById("cartOutput").innerText =
+        `Tax: ${tax}, Total: ${total}, ${delivery}`;
+}
+
+// Assignment 2
+function checkResult() {
+    let marks = document.getElementById("marks").value;
+    let grade;
+
+    if (marks >= 80) grade = "A";
+    else if (marks >= 70) grade = "B";
+    else if (marks >= 60) grade = "C";
+    else grade = "Fail";
+
+    let scholarship = marks >= 85 ? "Eligible for Scholarship" : "Not Eligible";
+
+    document.getElementById("resultOutput").innerText =
+        `Grade: ${grade}, ${scholarship}`;
+}
+
+// Assignment 3
+function searchCity() {
+    let cities = ["Karachi", "Lahore", "Islamabad", "Multan"];
+    let input = document.getElementById("city").value;
+    input =  input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+
+    let found = cities.includes(input);
+
+    document.getElementById("cityOutput").innerText =
+        found ? "City Found" : "City Not Found";
+}
+
+// Assignment 4
+function arrayOps() {
+    let arr = [1,2,3];
+
+    arr.push(4);
+    arr.pop();
+    arr.shift();
+    arr.unshift(0);
+
+    let spliced = arr.splice(1,1);
+    let sliced = arr.slice(0,2);
+
+    document.getElementById("arrayOutput").innerText =
+        `Final Array: ${arr}, Spliced: ${spliced}, Sliced: ${sliced}`;
+}
+
+// Assignment 5
+function searchProduct() {
+    let products = ["Phone", "Laptop", "Tablet", "Phone"];
+    let input = document.getElementById("product").value;
+    input = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+    let firstIndex = products.indexOf(input);
+    let lastIndex = products.lastIndexOf(input);
+
+
+    if (firstIndex !== -1) {
+        document.getElementById("productOutput").innerText =
+            `Found at index ${firstIndex} and last at ${lastIndex}`;
+    } else {
+        document.getElementById("productOutput").innerText =
+            "Product not found";
+    }
+}
+</script>
+
+</body>
+</html>
