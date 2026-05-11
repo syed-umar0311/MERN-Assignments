@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JavaScript Assignments</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#0f172a,#1e293b,#111827);
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:1000px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:25px;
+    padding:40px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+
+h1{
+    text-align:center;
+    color:white;
+    margin-bottom:35px;
+    font-size:40px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.btn{
+    border:none;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    padding:22px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:0.4s;
+    text-align:left;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.btn:hover{
+    transform:translateY(-8px);
+    background:linear-gradient(135deg,#f59e0b,#f97316);
+    box-shadow:0 15px 35px rgba(249,115,22,.4);
+}
+
+.number{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#f59e0b;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.title{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.desc{
+    font-size:13px;
+    margin-top:8px;
+    opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🚀 JavaScript Assignments</h1>
+
+    <div class="grid">
+
+        <button class="btn" onclick="assignment01()">
+            <div class="number">01</div>
+            <div class="title">Smart Shopping Cart</div>
+            <div class="desc">Buy items and generate receipt</div>
+        </button>
+
+        <button class="btn" onclick="assignment02()">
+            <div class="number">02</div>
+            <div class="title">Student Performance</div>
+            <div class="desc">Grades & scholarship checker</div>
+        </button>
+
+        <button class="btn" onclick="assignment03()">
+            <div class="number">03</div>
+            <div class="title">Contact Search</div>
+            <div class="desc">Find contact number</div>
+        </button>
+
+        <button class="btn" onclick="assignment04()">
+            <div class="number">04</div>
+            <div class="title">Quiz Application</div>
+            <div class="desc">Answer questions & score</div>
+        </button>
+
+        <button class="btn" onclick="assignment05()">
+            <div class="number">05</div>
+            <div class="title">Number Guessing Game</div>
+            <div class="desc">Guess number in 3 tries</div>
+        </button>
+
+    </div>
+</div>
+
+<script>
+
+// =========================
+// ASSIGNMENT 01 SHOPPING
+// =========================
+function assignment01(){
+
+    var items = ["Watch","Shoes","Cap","Bracelet"];
+    var prices = [25000,10000,250,500];
+
+    var menu = "🛒 SMART SHOPPING CART\n\n";
+
+    for(var i=0; i<items.length; i++){
+        menu += (i+1) + ". " + items[i] +
+        " - Rs." + prices[i] + "\n";
+    }
+
+    var choice = prompt(menu + "\nEnter Product Number:");
+    var qty = prompt("Enter Quantity:");
+
+    var index = Number(choice)-1;
+    qty = Number(qty);
+
+    if(index >= 0 && index < items.length && qty > 0){
+
+        var subtotal = prices[index] * qty;
+        var tax = subtotal * 0.05;
+        var delivery = subtotal > 5000 ? 0 : 200;
+        var finalTotal = subtotal + tax + delivery;
+
+        alert(
+`🧾 RECEIPT
+
+Product: ${items[index]}
+Price: Rs.${prices[index]}
+Quantity: ${qty}
+
+Subtotal: Rs.${subtotal}
+Tax (5%): Rs.${tax}
+
+Delivery: ${delivery === 0 ? "FREE" : "Rs."+delivery}
+
+Total Bill: Rs.${finalTotal}`
+);
+
+    }else{
+        alert("❌ Invalid Input!");
+    }
+}
+
+
+// =========================
+// ASSIGNMENT 02 STUDENT
+// =========================
+function assignment02(){
+
+    var students = ["Ali","Sara","Zain","Hadiya"];
+    var marks = [90,82,70,88];
+
+    var report = "🎓 STUDENT PERFORMANCE\n\n";
+
+    function grade(mark){
+        if(mark >= 85){
+            return "A";
+        }
+        else if(mark >= 70){
+            return "B";
+        }
+        else if(mark >= 50){
+            return "C";
+        }
+        else{
+            return "Fail";
+        }
+    }
+
+    for(var i=0; i<students.length; i++){
+
+        var scholarship =
+        marks[i] >= 85 ?
+        "Eligible ✅" :
+        "Not Eligible ❌";
+
+        report +=
+        students[i] +
+        "\nMarks: " + marks[i] +
+        "\nGrade: " + grade(marks[i]) +
+        "\nScholarship: " + scholarship +
+        "\n-----------------\n";
+    }
+
+    alert(report);
+}
+
+
+// =========================
+// ASSIGNMENT 03 CONTACT
+// =========================
+function assignment03(){
+
+    var names = ["Maham","Subhan","Hadiya","Hania","Aisha"];
+    var numbers = [
+        "0314-6916449",
+        "0300-1112223",
+        "0300-4445556",
+        "0300-7778889",
+        "0300-9990001"
+    ];
+
+    var search = prompt("📱 Enter Contact Name:");
+
+    var found = false;
+
+    for(var i=0; i<names.length; i++){
+
+        if(search.toLowerCase() === names[i].toLowerCase()){
+
+            alert(
+"✅ Contact Found\n\n" +
+"Name: " + names[i] +
+"\nPhone: " + numbers[i]
+            );
+
+            found = true;
+            break;
+        }
+    }
+
+    if(found === false){
+        alert("❌ Contact Not Found");
+    }
+}
+
+
+// =========================
+// ASSIGNMENT 04 QUIZ
+// =========================
+function assignment04(){
+
+    var questions = [
+        "What is 5 + 5?",
+        "Capital of Pakistan?",
+        "Language for website styling?"
+    ];
+
+    var answers = [
+        "10",
+        "Islamabad",
+        "CSS"
+    ];
+
+    var score = 0;
+
+    for(var i=0; i<questions.length; i++){
+
+        var userAnswer =
+        prompt("Question " + (i+1) +
+        "\n\n" + questions[i]);
+
+        if(
+            userAnswer &&
+            userAnswer.toLowerCase()
+            === answers[i].toLowerCase()
+        ){
+            score++;
+            alert("✅ Correct!");
+        }
+        else{
+            alert(
+"❌ Wrong!\nCorrect Answer: "
++ answers[i]
+            );
+        }
+    }
+
+    var result;
+
+    if(score === 3){
+        result = "Excellent 🌟";
+    }
+    else if(score >= 2){
+        result = "Good 👍";
+    }
+    else{
+        result = "Try Again 😅";
+    }
+
+    alert(
+"🏆 QUIZ RESULT\n\n" +
+"Score: " + score + "/3" +
+"\nResult: " + result
+    );
+}
+
+
+// =========================
+// ASSIGNMENT 05 GUESS GAME
+// =========================
+function assignment05(){
+
+    var random =
+    Math.floor(Math.random()*10)+1;
+
+    var won = false;
+
+    alert(
+"🎮 Number Guessing Game\n\n" +
+"Guess number between 1 - 10\n" +
+"You have only 3 attempts!"
+    );
+
+    for(var i=1; i<=3; i++){
+
+        var guess =
+        Number(prompt(
+        "Attempt " + i +
+        "\nEnter Number:"
+        ));
+
+        if(guess === random){
+
+            alert(
+"🎉 You Win!\n" +
+"Correct Number: " + random
+            );
+
+            won = true;
+            break;
+        }
+        else if(guess > random){
+            alert("📉 Too High!");
+        }
+        else{
+            alert("📈 Too Low!");
+        }
+    }
+
+    if(!won){
+        alert(
+"😢 Better Luck Next Time!\n" +
+"Correct Number Was: " +
+random
+        );
+    }
+}
+
+</script>
+
+</body>
+</html>
