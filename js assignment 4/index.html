@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Assignments</title>
+  <style>
+    /* ── General Reset & Base ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, serif;
+      background: #f4f1eb;
+      color: #2c2c2a;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Dark Mode ── */
+    body.dark {
+      background: #1a1a18;
+      color: #e8e5dc;
+    }
+    body.dark .card { background: #2a2a28; border-color: #3a3a38; }
+    body.dark input, body.dark select { background: #333; color: #e8e5dc; border-color: #555; }
+    body.dark .output-box { background: #333; border-color: #555; color: #e8e5dc; }
+    body.dark .task-header { background: #3a3a38; }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 30px 20px 20px;
+      margin-bottom: 30px;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    header p {
+      color: #888;
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    /* ── Dark Mode Toggle ── */
+    #darkToggleBtn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      padding: 8px 14px;
+      background: #2c2c2a;
+      color: #f4f1eb;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      z-index: 100;
+    }
+    body.dark #darkToggleBtn { background: #e8e5dc; color: #1a1a18; }
+
+    /* ── Assignment Sections ── */
+    .assignment {
+      max-width: 720px;
+      margin: 0 auto 40px;
+    }
+    .assignment-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-left: 4px solid #ba7517;
+      padding-left: 12px;
+      margin-bottom: 16px;
+      color: #ba7517;
+    }
+
+    /* ── Task Card ── */
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .task-header {
+      background: #f8f5ef;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      font-weight: bold;
+      color: #888;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #eee;
+    }
+    .task-body { padding: 16px; }
+
+    /* ── Output Box ── */
+    .output-box {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #f0ede6;
+      border: 1px solid #d8d3c8;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      min-height: 36px;
+      color: #333;
+    }
+
+    /* ── Inputs & Buttons ── */
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    input[type="email"],
+    select {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 8px;
+      outline: none;
+    }
+    input:focus { border-color: #ba7517; box-shadow: 0 0 0 2px rgba(186,117,23,0.15); }
+
+    button {
+      padding: 8px 18px;
+      background: #ba7517;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-right: 6px;
+      margin-top: 4px;
+    }
+    button:hover { background: #9a6010; }
+    button.secondary {
+      background: transparent;
+      color: #ba7517;
+      border: 1px solid #ba7517;
+    }
+    button.secondary:hover { background: #ba7517; color: #fff; }
+
+    /* ── Row Flex ── */
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* ── Counter ── */
+    #counterDisplay {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ba7517;
+      margin: 8px 0;
+    }
+
+    /* ── Toggle Paragraph ── */
+    #togglePara {
+      padding: 10px;
+      background: #e8f5e9;
+      border-radius: 6px;
+      border: 1px solid #c8e6c9;
+      margin-top: 8px;
+    }
+    body.dark #togglePara { background: #1b3c1e; border-color: #2e6b33; color: #a5d6a7; }
+
+    /* ── Hover Color Text ── */
+    #hoverText {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px dashed #ccc;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    /* ── Live Text Display ── */
+    #liveDisplay {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ba7517;
+      margin-top: 8px;
+    }
+
+    /* ── Focus Input ── */
+    #focusInput:focus { background: #fff8e1; border-color: #f9a825; }
+    body.dark #focusInput:focus { background: #3a3000; }
+
+    /* ── Registration Preview ── */
+    #regPreview {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #d8d3c8;
+      border-radius: 8px;
+      background: #f9f6f0;
+      display: none;
+    }
+    body.dark #regPreview { background: #2e2e2c; border-color: #444; }
+    #regPreview h3 { font-size: 1rem; margin-bottom: 8px; color: #ba7517; }
+    #regPreview p { font-size: 0.9rem; margin: 3px 0; }
+
+    /* ── Validation Error ── */
+    .error-msg { color: #c62828; font-size: 0.82rem; margin-top: 4px; }
+
+    /* ── Marks Result ── */
+    .excellent { color: #2e7d32; font-weight: bold; }
+    .good      { color: #1565c0; font-weight: bold; }
+    .tryagain  { color: #c62828; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<!-- Dark Mode Toggle -->
+<button id="darkToggleBtn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+<header>
+  <h1>JavaScript Assignments</h1>
+</header>
+
+
+<!-- ══════════════════════════════════════════
+     ASSIGNMENT 1 — Functions & Conditions
+═══════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 1 — Functions & Conditions</div>
+
+  <!-- Task 1: Show name using alert -->
+  <div class="card">
+    <div class="task-header">Task 1 · Show name using alert()</div>
+    <div class="task-body">
+      <button onclick="showName()">Show My Name</button>
+    </div>
+  </div>
+
+  <!-- Task 2: add(a, b) -->
+  <div class="card">
+    <div class="task-header">Task 2 · Add two numbers</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="number" id="num1" placeholder="Number 1" style="max-width:120px"/>
+        <input type="number" id="num2" placeholder="Number 2" style="max-width:120px"/>
+        <button onclick="addNumbers()">Add</button>
+      </div>
+      <div class="output-box" id="addResult">Result will appear here</div>
+    </div>
+  </div>
+
+  <!-- Task 3: Marks checker -->
+  <div class="card">
+    <div class="task-header">Task 3 · Marks checker</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="number" id="marks" placeholder="Enter marks (0–100)" style="max-width:200px"/>
+        <button onclick="checkMarks()">Check</button>
+      </div>
+      <div class="output-box" id="marksResult">Result will appear here</div>
+    </div>
+  </div>
+
+  <!-- Task 4: Calculator (switch) -->
+  <div class="card">
+    <div class="task-header">Task 4 · Calculator using switch</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="number" id="calcA" placeholder="A" style="max-width:90px"/>
+        <select id="calcOp" style="max-width:70px">
+          <option value="+">+</option>
+          <option value="-">−</option>
+          <option value="*">×</option>
+          <option value="/">÷</option>
+        </select>
+        <input type="number" id="calcB" placeholder="B" style="max-width:90px"/>
+        <button onclick="calculate()">= ?</button>
+      </div>
+      <div class="output-box" id="calcResult">Result will appear here</div>
+    </div>
+  </div>
+
+  <!-- Task 5: Square of a number -->
+  <div class="card">
+    <div class="task-header">Task 5 · Square of a number</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="number" id="sqNum" placeholder="Enter a number" style="max-width:180px"/>
+        <button onclick="showSquare()">Get Square</button>
+      </div>
+      <div class="output-box" id="sqResult">Result will appear here</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ASSIGNMENT 2 — Loops Practice
+═══════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 2 — Loops Practice</div>
+
+  <!-- Task 1: 1 to 20 using while -->
+  <div class="card">
+    <div class="task-header">Task 1 · Numbers 1 to 20 (while loop)</div>
+    <div class="task-body">
+      <button onclick="printOneTo20()">Print Numbers</button>
+      <div class="output-box" id="loop1Out">Click to see output</div>
+    </div>
+  </div>
+
+  <!-- Task 2: Even numbers 2 to 50 -->
+  <div class="card">
+    <div class="task-header">Task 2 · Even numbers 2 to 50</div>
+    <div class="task-body">
+      <button onclick="printEvens()">Print Evens</button>
+      <div class="output-box" id="loop2Out">Click to see output</div>
+    </div>
+  </div>
+
+  <!-- Task 3: Table of 7 -->
+  <div class="card">
+    <div class="task-header">Task 3 · Multiplication table of 7</div>
+    <div class="task-body">
+      <button onclick="printTable7()">Print Table</button>
+      <div class="output-box" id="loop3Out" style="white-space:pre-line">Click to see output</div>
+    </div>
+  </div>
+
+  <!-- Task 4: do...while 10 to 1 -->
+  <div class="card">
+    <div class="task-header">Task 4 · Numbers 10 to 1 (do...while)</div>
+    <div class="task-body">
+      <button onclick="countDown()">Count Down</button>
+      <div class="output-box" id="loop4Out">Click to see output</div>
+    </div>
+  </div>
+
+  <!-- Task 5: Password loop -->
+  <div class="card">
+    <div class="task-header">Task 5 · Password checker (correct password: <code>abc123</code>)</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="password" id="pwdInput" placeholder="Enter password" style="max-width:200px"/>
+        <button onclick="checkPassword()">Submit</button>
+      </div>
+      <div class="output-box" id="pwdResult">Try entering the password</div>
+      <p style="font-size:0.8rem; color:#888; margin-top:4px;">Hint: the correct password is <strong>abc123</strong></p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ASSIGNMENT 3 — Events & Buttons
+═══════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 3 — Events &amp; Buttons</div>
+
+  <!-- Task 1: Change background color -->
+  <div class="card">
+    <div class="task-header">Task 1 · Change background color</div>
+    <div class="task-body">
+      <button onclick="changeBgColor()">Change Background</button>
+      <div class="output-box" id="bgColorMsg">Click the button to change color</div>
+    </div>
+  </div>
+
+  <!-- Task 2: Counter -->
+  <div class="card">
+    <div class="task-header">Task 2 · Click counter</div>
+    <div class="task-body">
+      <div id="counterDisplay">0</div>
+      <button onclick="increaseCounter()">Click Me!</button>
+      <button class="secondary" onclick="resetCounter()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Task 3: Alert on click -->
+  <div class="card">
+    <div class="task-header">Task 3 · Show alert on button click</div>
+    <div class="task-body">
+      <button onclick="showAlert()">Click for Alert</button>
+    </div>
+  </div>
+
+  <!-- Task 4: Hide/Show paragraph -->
+  <div class="card">
+    <div class="task-header">Task 4 · Hide and show paragraph</div>
+    <div class="task-body">
+      <button onclick="toggleParagraph()">Toggle Paragraph</button>
+      <div id="togglePara">👋 Hello! I am a paragraph. You can hide and show me using the button above.</div>
+    </div>
+  </div>
+
+  <!-- Task 5: Hover color change -->
+  <div class="card">
+    <div class="task-header">Task 5 · Change text color on mouse over</div>
+    <div class="task-body">
+      <span
+        id="hoverText"
+        onmouseover="changeTextColor()"
+        onmouseout="resetTextColor()">
+        Hover over me to change my color!
+      </span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ASSIGNMENT 4 — Input Fields & Forms
+═══════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 4 — Input Fields &amp; Forms</div>
+
+  <!-- Task 1: Live text display -->
+  <div class="card">
+    <div class="task-header">Task 1 · Live text display</div>
+    <div class="task-body">
+      <input type="text" id="liveInput" placeholder="Type something..." oninput="showLiveText()" style="max-width:300px"/>
+      <div id="liveDisplay">Your text will appear here...</div>
+    </div>
+  </div>
+
+  <!-- Task 2: Change input background on focus -->
+  <div class="card">
+    <div class="task-header">Task 2 · Background changes on focus</div>
+    <div class="task-body">
+      <input type="text" id="focusInput" placeholder="Click inside me!" style="max-width:280px"/>
+      <p style="font-size:0.82rem; color:#888; margin-top:6px;">Background turns yellow when focused</p>
+    </div>
+  </div>
+
+  <!-- Task 3: Blur event -->
+  <div class="card">
+    <div class="task-header">Task 3 · Blur event (alert on focus loss)</div>
+    <div class="task-body">
+      <input
+        type="text"
+        id="blurInput"
+        placeholder="Click here, then click away"
+        onblur="blurAlert()"
+        style="max-width:300px"/>
+    </div>
+  </div>
+
+  <!-- Task 4: Login form → console -->
+  <div class="card">
+    <div class="task-header">Task 4 · Login form (check browser console)</div>
+    <div class="task-body">
+      <input type="text" id="loginUser" placeholder="Username" style="max-width:240px; margin-bottom:8px; display:block"/>
+      <input type="password" id="loginPass" placeholder="Password" style="max-width:240px; margin-bottom:8px; display:block"/>
+      <button onclick="loginForm()">Login</button>
+      <div class="output-box" id="loginMsg" style="margin-top:8px">Press Login to submit (check console too)</div>
+    </div>
+  </div>
+
+  <!-- Task 5: Clear all fields -->
+  <div class="card">
+    <div class="task-header">Task 5 · Clear all input fields</div>
+    <div class="task-body">
+      <input type="text"  id="clearField1" placeholder="Field 1" style="max-width:200px; margin-bottom:6px; display:block"/>
+      <input type="text"  id="clearField2" placeholder="Field 2" style="max-width:200px; margin-bottom:6px; display:block"/>
+      <input type="email" id="clearField3" placeholder="Field 3 (email)" style="max-width:200px; margin-bottom:10px; display:block"/>
+      <button onclick="clearAllFields()">Clear All</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ASSIGNMENT 5 — Student Registration Form
+═══════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 5 — Mini Project: Student Registration Form</div>
+
+  <div class="card">
+    <div class="task-body">
+
+      <!-- Fields -->
+      <div style="display:grid; gap:10px; max-width:400px;">
+        <div>
+          <label style="font-size:0.85rem; color:#888;">Full Name</label>
+          <input type="text" id="regName" placeholder="e.g. Ali Hassan" style="max-width:100%; width:100%; display:block; margin-top:4px;"/>
+          <div class="error-msg" id="errName"></div>
+        </div>
+        <div>
+          <label style="font-size:0.85rem; color:#888;">Email Address</label>
+          <input type="email" id="regEmail" placeholder="e.g. ali@example.com" style="max-width:100%; width:100%; display:block; margin-top:4px;"/>
+          <div class="error-msg" id="errEmail"></div>
+        </div>
+        <div>
+          <label style="font-size:0.85rem; color:#888;">Course</label>
+          <select id="regCourse" style="max-width:100%; width:100%; display:block; margin-top:4px;">
+            <option value="">-- Select a Course --</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Python Programming">Python Programming</option>
+            <option value="Data Science">Data Science</option>
+            <option value="Graphic Design">Graphic Design</option>
+          </select>
+          <div class="error-msg" id="errCourse"></div>
+        </div>
+        <div>
+          <label style="font-size:0.85rem; color:#888;">City</label>
+          <input type="text" id="regCity" placeholder="e.g. Karachi" style="max-width:100%; width:100%; display:block; margin-top:4px;"/>
+          <div class="error-msg" id="errCity"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <button onclick="submitRegistration()">Register</button>
+        <button class="secondary" onclick="resetForm()">Reset Form</button>
+      </div>
+
+      <!-- Data Preview -->
+      <div id="regPreview">
+        <h3>✅ Registration Successful!</h3>
+        <p><strong>Name:</strong>   <span id="pvName"></span></p>
+        <p><strong>Email:</strong>  <span id="pvEmail"></span></p>
+        <p><strong>Course:</strong> <span id="pvCourse"></span></p>
+        <p><strong>City:</strong>   <span id="pvCity"></span></p>
+        <p style="margin-top:8px; font-size:0.82rem; color:#888;" id="pvCourseMsg"></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+
+  /* ── Dark Mode ──────────────────────────── */
+  function toggleDarkMode() {
+    // Toggle dark class on body
+    document.body.classList.toggle("dark");
+    var btn = document.getElementById("darkToggleBtn");
+    if (document.body.classList.contains("dark")) {
+      btn.textContent = "☀️ Light Mode";
+    } else {
+      btn.textContent = "🌙 Dark Mode";
+    }
+  }
+
+
+  /* ── ASSIGNMENT 1 ───────────────────────── */
+
+  // Task 1: Show name using alert
+  function showName() {
+    alert("My name is Umar!");
+  }
+
+  // Task 2: add(a, b) function
+  function add(a, b) {
+    return a + b;
+  }
+  function addNumbers() {
+    var a = Number(document.getElementById("num1").value);
+    var b = Number(document.getElementById("num2").value);
+    var result = add(a, b);
+    document.getElementById("addResult").textContent = a + " + " + b + " = " + result;
+  }
+
+  // Task 3: Check marks
+  function checkMarks() {
+    var marks = Number(document.getElementById("marks").value);
+    var resultDiv = document.getElementById("marksResult");
+    var msg = "";
+    var cls = "";
+
+    if (marks >= 80) {
+      msg = "🌟 Excellent!";
+      cls = "excellent";
+    } else if (marks >= 50) {
+      msg = "👍 Good";
+      cls = "good";
+    } else {
+      msg = "😞 Try Again";
+      cls = "tryagain";
+    }
+
+    resultDiv.innerHTML = "<span class='" + cls + "'>" + msg + "</span>";
+  }
+
+  // Task 4: Calculator using switch
+  function calculate() {
+    var a  = Number(document.getElementById("calcA").value);
+    var b  = Number(document.getElementById("calcB").value);
+    var op = document.getElementById("calcOp").value;
+    var result;
+
+    switch (op) {
+      case "+": result = a + b; break;
+      case "-": result = a - b; break;
+      case "*": result = a * b; break;
+      case "/":
+        if (b === 0) {
+          document.getElementById("calcResult").textContent = "Cannot divide by zero!";
+          return;
+        }
+        result = a / b;
+        break;
+    }
+
+    document.getElementById("calcResult").textContent = a + " " + op + " " + b + " = " + result;
+  }
+
+  // Task 5: Return square of a number
+  function getSquare(n) {
+    return n * n;
+  }
+  function showSquare() {
+    var n = Number(document.getElementById("sqNum").value);
+    document.getElementById("sqResult").textContent = "Square of " + n + " = " + getSquare(n);
+  }
+
+
+  /* ── ASSIGNMENT 2 ───────────────────────── */
+
+  // Task 1: Print 1 to 20 using while loop
+  function printOneTo20() {
+    var i = 1;
+    var output = "";
+    while (i <= 20) {
+      output += i + "  ";
+      i++;
+    }
+    document.getElementById("loop1Out").textContent = output;
+  }
+
+  // Task 2: Even numbers 2 to 50
+  function printEvens() {
+    var i = 2;
+    var output = "";
+    while (i <= 50) {
+      output += i + "  ";
+      i += 2;
+    }
+    document.getElementById("loop2Out").textContent = output;
+  }
+
+  // Task 3: Table of 7 using for loop
+  function printTable7() {
+    var output = "";
+    for (var i = 1; i <= 10; i++) {
+      output += "7 × " + i + " = " + (7 * i) + "\n";
+    }
+    document.getElementById("loop3Out").textContent = output;
+  }
+
+  // Task 4: do...while countdown 10 to 1
+  function countDown() {
+    var i = 10;
+    var output = "";
+    do {
+      output += i + "  ";
+      i--;
+    } while (i >= 1);
+    document.getElementById("loop4Out").textContent = output;
+  }
+
+  // Task 5: Password check
+  var correctPassword = "abc123";
+  var attempts = 0;
+
+  function checkPassword() {
+    var entered = document.getElementById("pwdInput").value;
+    var resultDiv = document.getElementById("pwdResult");
+    attempts++;
+
+    if (entered === correctPassword) {
+      resultDiv.textContent = "✅ Correct password! Logged in after " + attempts + " attempt(s).";
+      resultDiv.style.color = "#2e7d32";
+      attempts = 0;
+    } else {
+      resultDiv.textContent = "❌ Wrong password. Attempts: " + attempts + ". Try again!";
+      resultDiv.style.color = "#c62828";
+    }
+    document.getElementById("pwdInput").value = "";
+  }
+
+
+  /* ── ASSIGNMENT 3 ───────────────────────── */
+
+  // Task 1: Change background color
+  var bgColors = ["#fce4ec", "#e8f5e9", "#e3f2fd", "#fff3e0", "#f3e5f5"];
+  var bgIndex  = 0;
+
+  function changeBgColor() {
+    document.body.style.background = bgColors[bgIndex];
+    document.getElementById("bgColorMsg").textContent = "Background changed to: " + bgColors[bgIndex];
+    bgIndex = (bgIndex + 1) % bgColors.length;
+  }
+
+  // Task 2: Click counter
+  var counter = 0;
+
+  function increaseCounter() {
+    counter++;
+    document.getElementById("counterDisplay").textContent = counter;
+  }
+  function resetCounter() {
+    counter = 0;
+    document.getElementById("counterDisplay").textContent = counter;
+  }
+
+  // Task 3: Alert on click
+  function showAlert() {
+    alert("🎉 Hello! You clicked the button!");
+  }
+
+  // Task 4: Toggle paragraph
+  function toggleParagraph() {
+    var para = document.getElementById("togglePara");
+    if (para.style.display === "none") {
+      para.style.display = "block";
+    } else {
+      para.style.display = "none";
+    }
+  }
+
+  // Task 5: Change text color on mouseover
+  function changeTextColor() {
+    document.getElementById("hoverText").style.color = "#ba7517";
+  }
+  function resetTextColor() {
+    document.getElementById("hoverText").style.color = "";
+  }
+
+
+  /* ── ASSIGNMENT 4 ───────────────────────── */
+
+  // Task 1: Live text display
+  function showLiveText() {
+    var text = document.getElementById("liveInput").value;
+    document.getElementById("liveDisplay").textContent = text || "Your text will appear here...";
+  }
+
+  // Task 3: Blur alert
+  function blurAlert() {
+    alert("You left the input field!");
+  }
+
+  // Task 4: Login form → console
+  function loginForm() {
+    var user = document.getElementById("loginUser").value;
+    var pass = document.getElementById("loginPass").value;
+    console.log("Username: " + user);
+    console.log("Password: " + pass);
+    document.getElementById("loginMsg").textContent = "Submitted! Username: " + user + " (check console for details)";
+  }
+
+  // Task 5: Clear all input fields
+  function clearAllFields() {
+    document.getElementById("clearField1").value = "";
+    document.getElementById("clearField2").value = "";
+    document.getElementById("clearField3").value = "";
+  }
+
+
+  /* ── ASSIGNMENT 5 — Registration Form ───── */
+
+  // Function 1: Validate fields (returns true if valid)
+  function validateForm() {
+    var isValid = true;
+
+    // Clear previous errors
+    document.getElementById("errName").textContent   = "";
+    document.getElementById("errEmail").textContent  = "";
+    document.getElementById("errCourse").textContent = "";
+    document.getElementById("errCity").textContent   = "";
+
+    // Check each field using a loop and array
+    var fields = [
+      { id: "regName",   errId: "errName",   label: "Name"   },
+      { id: "regEmail",  errId: "errEmail",  label: "Email"  },
+      { id: "regCourse", errId: "errCourse", label: "Course" },
+      { id: "regCity",   errId: "errCity",   label: "City"   }
+    ];
+
+    for (var i = 0; i < fields.length; i++) {
+      var value = document.getElementById(fields[i].id).value.trim();
+      if (value === "") {
+        document.getElementById(fields[i].errId).textContent = fields[i].label + " is required!";
+        isValid = false;
+      }
+    }
+
+    return isValid;
+  }
+
+  // Function 2: Get course message using switch
+  function getCourseMessage(course) {
+    var msg = "";
+    switch (course) {
+      case "Web Development":    msg = "Great choice! You will learn HTML, CSS, and JavaScript."; break;
+      case "Python Programming": msg = "Excellent! Python is great for beginners.";              break;
+      case "Data Science":       msg = "Amazing! Data Science is the future.";                   break;
+      case "Graphic Design":     msg = "Creative path! Design skills are always in demand.";     break;
+      default:                   msg = "";
+    }
+    return msg;
+  }
+
+  // Submit registration
+  function submitRegistration() {
+    // Validate first
+    if (!validateForm()) {
+      return;
+    }
+
+    // Read values
+    var name   = document.getElementById("regName").value.trim();
+    var email  = document.getElementById("regEmail").value.trim();
+    var course = document.getElementById("regCourse").value;
+    var city   = document.getElementById("regCity").value.trim();
+
+    // Display data on page
+    document.getElementById("pvName").textContent   = name;
+    document.getElementById("pvEmail").textContent  = email;
+    document.getElementById("pvCourse").textContent = course;
+    document.getElementById("pvCity").textContent   = city;
+    document.getElementById("pvCourseMsg").textContent = getCourseMessage(course);
+
+    // Show preview
+    document.getElementById("regPreview").style.display = "block";
+  }
+
+  // Reset registration form
+  function resetForm() {
+    document.getElementById("regName").value    = "";
+    document.getElementById("regEmail").value   = "";
+    document.getElementById("regCourse").value  = "";
+    document.getElementById("regCity").value    = "";
+    document.getElementById("regPreview").style.display = "none";
+    document.getElementById("errName").textContent  = "";
+    document.getElementById("errEmail").textContent = "";
+    document.getElementById("errCourse").textContent = "";
+    document.getElementById("errCity").textContent  = "";
+  }
+
+</script>
+</body>
+</html>
