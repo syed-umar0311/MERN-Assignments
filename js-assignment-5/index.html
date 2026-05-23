@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Assignments — Chapter 51 to 68</title>
+  <style>
+    /* ── Reset & Base ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #f0ece3;
+      color: #2a2a28;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Dark Mode ── */
+    body.dark { background: #1c1c1a; color: #e0ddd5; }
+    body.dark .card          { background: #2a2a28; border-color: #3a3a38; }
+    body.dark .task-header   { background: #323230; }
+    body.dark .output-box    { background: #323230; border-color: #4a4a48; color: #e0ddd5; }
+    body.dark input, body.dark select, body.dark textarea {
+      background: #333; color: #e0ddd5; border-color: #555;
+    }
+    body.dark #sliderBox     { background: #222; }
+    body.dark .thumb         { border-color: #555; }
+    body.dark #profileCard   { background: #2e2e2c; border-color: #444; }
+    body.dark .loop-para     { background: #2a3a2a !important; color: #a5d6a7 !important; }
+
+    /* ── Dark Toggle ── */
+    #darkBtn {
+      position: fixed; top: 14px; right: 14px;
+      padding: 7px 14px; background: #2a2a28; color: #f0ece3;
+      border: none; border-radius: 20px; cursor: pointer;
+      font-size: 0.82rem; z-index: 999;
+    }
+    body.dark #darkBtn { background: #e0ddd5; color: #1c1c1a; }
+
+    /* ── Header ── */
+    header { text-align: center; padding: 28px 0 24px; margin-bottom: 28px; }
+    header h1 { font-size: 1.9rem; font-weight: bold; letter-spacing: 1px; }
+    header p  { color: #888; margin-top: 5px; font-size: 0.9rem; }
+
+    /* ── Assignment wrapper ── */
+    .assignment { max-width: 740px; margin: 0 auto 38px; }
+    .assignment-title {
+      font-size: 1.2rem; font-weight: bold;
+      border-left: 4px solid #1a6e5a;
+      padding-left: 12px; margin-bottom: 14px;
+      color: #1a6e5a;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff; border: 1px solid #ddd;
+      border-radius: 10px; margin-bottom: 14px; overflow: hidden;
+    }
+    .task-header {
+      background: #f5f2ec; padding: 9px 16px;
+      font-size: 0.83rem; font-weight: bold; color: #888;
+      letter-spacing: 0.4px; border-bottom: 1px solid #eee;
+    }
+    .task-body { padding: 14px 16px; }
+
+    /* ── Output box ── */
+    .output-box {
+      margin-top: 10px; padding: 10px 14px;
+      background: #edeae3; border: 1px solid #d5d0c8;
+      border-radius: 6px; font-size: 0.88rem;
+      min-height: 36px; color: #333;
+      white-space: pre-wrap;
+    }
+
+    /* ── Inputs & Buttons ── */
+    input[type="text"], input[type="number"],
+    input[type="password"], input[type="email"],
+    input[type="url"], select {
+      padding: 8px 12px; border: 1px solid #ccc;
+      border-radius: 6px; font-size: 0.88rem;
+      width: 100%; max-width: 280px;
+      margin-bottom: 6px; outline: none;
+      font-family: inherit;
+    }
+    input:focus { border-color: #1a6e5a; box-shadow: 0 0 0 2px rgba(26,110,90,0.15); }
+
+    button {
+      padding: 8px 16px; background: #1a6e5a; color: #fff;
+      border: none; border-radius: 6px; cursor: pointer;
+      font-size: 0.88rem; margin-right: 6px; margin-top: 4px;
+      font-family: inherit;
+    }
+    button:hover { background: #125048; }
+    button.sec {
+      background: transparent; color: #1a6e5a;
+      border: 1px solid #1a6e5a;
+    }
+    button.sec:hover { background: #1a6e5a; color: #fff; }
+    button.danger { background: #c62828; }
+    button.danger:hover { background: #9a1f1f; }
+
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* ── Assignment 1 ── */
+    .demo-para { margin: 4px 0; padding: 6px 10px; border-radius: 4px; background: #f5f2ec; }
+    body.dark .demo-para { background: #333; }
+    .demo-heading { font-size: 1.1rem; font-weight: bold; margin: 4px 0; }
+
+    /* ── Assignment 2 – Images ── */
+    #mainImg {
+      width: 160px; height: 110px; object-fit: cover;
+      border-radius: 8px; border: 2px solid #ddd;
+      display: block; margin-bottom: 8px;
+      transition: width 0.2s, height 0.2s;
+      cursor: pointer;
+    }
+    .thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .thumb {
+      width: 70px; height: 50px; object-fit: cover;
+      border-radius: 5px; border: 2px solid #ddd;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .thumb:hover { border-color: #1a6e5a; }
+    .thumb.active { border-color: #1a6e5a; }
+    #largePreview {
+      margin-top: 10px; width: 240px; height: 160px;
+      object-fit: cover; border-radius: 8px;
+      border: 2px solid #1a6e5a; display: none;
+    }
+    #sliderBox {
+      position: relative; width: 100%; max-width: 320px;
+      background: #eee; border-radius: 8px; overflow: hidden;
+      height: 180px;
+    }
+    #sliderImg {
+      width: 100%; height: 180px; object-fit: cover; display: block;
+    }
+    .slider-btns { margin-top: 8px; }
+
+    /* ── Assignment 3 – Forms ── */
+    #pwdStrength { font-weight: bold; margin-top: 6px; }
+    .weak   { color: #c62828; }
+    .strong { color: #2e7d32; }
+    .error-msg { color: #c62828; font-size: 0.8rem; margin-top: 2px; }
+
+    /* ── Assignment 4 – Loops ── */
+    .loop-para {
+      padding: 6px 12px; margin: 4px 0;
+      border-radius: 5px; background: #e8f5e9;
+      font-weight: bold;
+    }
+    #counterNum {
+      font-size: 2.8rem; font-weight: bold;
+      color: #1a6e5a; margin: 8px 0;
+    }
+    #tableOutput { font-size: 0.88rem; white-space: pre-line; }
+    #evenOutput  { line-height: 2; }
+    .even-badge {
+      display: inline-block; background: #1a6e5a; color: #fff;
+      border-radius: 20px; padding: 2px 10px; margin: 3px;
+      font-size: 0.8rem;
+    }
+
+    /* ── Assignment 5 – Profile Card ── */
+    #profileCard {
+      display: none; margin-top: 14px;
+      border: 1px solid #ddd; border-radius: 10px;
+      padding: 16px; background: #f9f6f0;
+      max-width: 340px;
+    }
+    #profileCard img {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; border: 3px solid #1a6e5a;
+      display: block; margin: 0 auto 12px;
+    }
+    #profileCard .pc-name {
+      font-size: 1.1rem; font-weight: bold;
+      text-align: center; margin-bottom: 8px;
+    }
+    #profileCard table { width: 100%; font-size: 0.88rem; }
+    #profileCard td { padding: 4px 6px; }
+    #profileCard td:first-child { color: #888; width: 50%; }
+    #imgPreview {
+      width: 70px; height: 70px; border-radius: 50%;
+      object-fit: cover; border: 2px solid #ddd;
+      display: none; margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<button id="darkBtn" onclick="toggleDark()">🌙 Dark Mode</button>
+
+<header>
+  <h1>JavaScript Assignment 5</h1>
+  
+</header>
+
+
+<!-- ════════════════════════════════════════
+     ASSIGNMENT 1 — Paragraphs & Text
+════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 1 — Paragraphs &amp; Text Manipulation</div>
+
+  <!-- Task 1: Change text of all paragraphs -->
+  <div class="card">
+    <div class="task-header">Task 1 · Change text of all 3 paragraphs</div>
+    <div class="task-body">
+      <p class="demo-para" id="p1">Paragraph 1 — original text</p>
+      <p class="demo-para" id="p2">Paragraph 2 — original text</p>
+      <p class="demo-para" id="p3">Paragraph 3 — original text</p>
+      <button onclick="changeAllText()" style="margin-top:8px">Change Text</button>
+    </div>
+  </div>
+
+  <!-- Task 2: Change text color -->
+  <div class="card">
+    <div class="task-header">Task 2 · Change text color of all paragraphs</div>
+    <div class="task-body">
+      <p class="demo-para" id="cp1">First paragraph for color change</p>
+      <p class="demo-para" id="cp2">Second paragraph for color change</p>
+      <p class="demo-para" id="cp3">Third paragraph for color change</p>
+      <button onclick="changeAllColors()" style="margin-top:8px">Change Color</button>
+      <button class="sec" onclick="resetColors()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Task 3: Change font size of all headings -->
+  <div class="card">
+    <div class="task-header">Task 3 · Change font size of all headings</div>
+    <div class="task-body">
+      <h3 class="demo-heading" id="h1">Heading One</h3>
+      <h3 class="demo-heading" id="h2">Heading Two</h3>
+      <h3 class="demo-heading" id="h3">Heading Three</h3>
+      <button onclick="changeHeadingSize()" style="margin-top:8px">Increase Font Size</button>
+      <button class="sec" onclick="resetHeadingSize()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Task 4: Show date and time -->
+  <div class="card">
+    <div class="task-header">Task 4 · Show current date and time</div>
+    <div class="task-body">
+      <button onclick="showDateTime()">Show Date &amp; Time</button>
+      <div class="output-box" id="dateTimeOut">Click the button to see current date and time</div>
+    </div>
+  </div>
+
+  <!-- Task 5: Hide/Show paragraph -->
+  <div class="card">
+    <div class="task-header">Task 5 · Hide and show a paragraph</div>
+    <div class="task-body">
+      <button onclick="togglePara5()">Toggle Paragraph</button>
+      <p class="demo-para" id="toggleP" style="margin-top:8px">
+        👋 I can be hidden and shown using the button above!
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     ASSIGNMENT 2 — Images & Mouse Events
+════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 2 — Images &amp; Mouse Events</div>
+
+  <!-- Task 1: Image changes on button click -->
+  <div class="card">
+    <div class="task-header">Task 1 · Change image on button click</div>
+    <div class="task-body">
+      <!-- Using placeholder images from picsum -->
+      <img id="mainImg"
+        src="https://picsum.photos/seed/nature/300/200"
+        alt="Main image"/>
+      <button onclick="changeImage()">Change Image</button>
+      <div class="output-box" id="imgMsg" style="margin-top:8px">Image 1 of 4</div>
+    </div>
+  </div>
+
+  <!-- Task 2 & 3: Mouse over / out resize -->
+  <div class="card">
+    <div class="task-header">Task 2 &amp; 3 · Image grows on hover, returns on mouse leave</div>
+    <div class="task-body">
+      <img
+        id="hoverImg"
+        src="https://picsum.photos/seed/mountain/300/200"
+        alt="Hover image"
+        style="width:140px; height:95px; object-fit:cover; border-radius:8px; border:2px solid #ddd; transition:0.25s; display:block; cursor:pointer;"
+        onmouseover="this.style.width='200px'; this.style.height='135px';"
+        onmouseout="this.style.width='140px'; this.style.height='95px';"/>
+      <p style="font-size:0.82rem; color:#888; margin-top:6px;">Hover over the image</p>
+    </div>
+  </div>
+
+  <!-- Task 4: Thumbnail → large preview -->
+  <div class="card">
+    <div class="task-header">Task 4 · Click thumbnail to see large preview</div>
+    <div class="task-body">
+      <div class="thumbs">
+        <img class="thumb active" src="https://picsum.photos/seed/city/300/200"    alt="City"    onclick="previewThumb(this, 'City')"/>
+        <img class="thumb"        src="https://picsum.photos/seed/forest/300/200"  alt="Forest"  onclick="previewThumb(this, 'Forest')"/>
+        <img class="thumb"        src="https://picsum.photos/seed/ocean/300/200"   alt="Ocean"   onclick="previewThumb(this, 'Ocean')"/>
+      </div>
+      <img id="largePreview" src="https://picsum.photos/seed/city/300/200" alt="Large preview"/>
+      <p style="font-size:0.82rem; color:#888; margin-top:4px;" id="previewLabel">Click a thumbnail above</p>
+    </div>
+  </div>
+
+  <!-- Task 5: Image Slider -->
+  <div class="card">
+    <div class="task-header">Task 5 · Image slider (Next / Previous)</div>
+    <div class="task-body">
+      <div id="sliderBox">
+        <img id="sliderImg" src="https://picsum.photos/seed/slide1/400/300" alt="Slide"/>
+      </div>
+      <div class="slider-btns">
+        <button onclick="prevSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+        <span style="font-size:0.82rem; color:#888; margin-left:8px;" id="slideLabel">Slide 1 / 5</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     ASSIGNMENT 3 — Forms & Input Fields
+════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 3 — Forms &amp; Input Fields</div>
+
+  <!-- Task 1: Live text -->
+  <div class="card">
+    <div class="task-header">Task 1 · Live text display</div>
+    <div class="task-body">
+      <input type="text" id="liveIn" placeholder="Type something..." oninput="showLive()" style="max-width:300px"/>
+      <div class="output-box" id="liveOut">Your text appears here in real time...</div>
+    </div>
+  </div>
+
+  <!-- Task 2: Password strength -->
+  <div class="card">
+    <div class="task-header">Task 2 · Password strength checker</div>
+    <div class="task-body">
+      <input type="password" id="pwdStrIn" placeholder="Type a password..." oninput="checkStrength()" style="max-width:280px"/>
+      <div id="pwdStrength">Strength will show here</div>
+    </div>
+  </div>
+
+  <!-- Task 3: Login form with validation -->
+  <div class="card">
+    <div class="task-header">Task 3 · Login form with empty field validation</div>
+    <div class="task-body">
+      <input type="text"     id="loginU" placeholder="Username" style="max-width:260px; display:block"/>
+      <div class="error-msg" id="errU"></div>
+      <input type="password" id="loginP" placeholder="Password" style="max-width:260px; display:block; margin-top:4px"/>
+      <div class="error-msg" id="errP"></div>
+      <button onclick="validateLogin()" style="margin-top:8px">Login</button>
+      <div class="output-box" id="loginMsg" style="margin-top:8px; display:none"></div>
+    </div>
+  </div>
+
+  <!-- Task 4: Show/Hide password -->
+  <div class="card">
+    <div class="task-header">Task 4 · Show / Hide password with checkbox</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="password" id="showPwd" placeholder="Enter password" style="max-width:220px; margin-bottom:0"/>
+        <label style="font-size:0.88rem; display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="checkbox" id="showPwdCheck" onchange="toggleShowPwd()"/>
+          Show Password
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task 5: Reset form -->
+  <div class="card">
+    <div class="task-header">Task 5 · Reset all form fields</div>
+    <div class="task-body">
+      <input type="text"  id="rf1" placeholder="First Name"  style="max-width:220px; display:block; margin-bottom:6px"/>
+      <input type="email" id="rf2" placeholder="Email"       style="max-width:220px; display:block; margin-bottom:6px"/>
+      <input type="text"  id="rf3" placeholder="Phone"       style="max-width:220px; display:block; margin-bottom:10px"/>
+      <button onclick="resetForm3()">Reset All Fields</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     ASSIGNMENT 4 — Loops & DOM
+════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 4 — Loops &amp; DOM Practice</div>
+
+  <!-- Task 1: 5 paragraphs with loop -->
+  <div class="card">
+    <div class="task-header">Task 1 · Create 5 paragraphs using a loop (numbers 1–5)</div>
+    <div class="task-body">
+      <button onclick="createParas()">Create Paragraphs</button>
+      <div id="loopParaContainer" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- Task 2: Color paragraphs with loop -->
+  <div class="card">
+    <div class="task-header">Task 2 · Color all paragraphs using a loop</div>
+    <div class="task-body">
+      <p class="loop-para" id="lp1">Paragraph 1</p>
+      <p class="loop-para" id="lp2">Paragraph 2</p>
+      <p class="loop-para" id="lp3">Paragraph 3</p>
+      <p class="loop-para" id="lp4">Paragraph 4</p>
+      <p class="loop-para" id="lp5">Paragraph 5</p>
+      <button onclick="colorParas()" style="margin-top:8px">Color All</button>
+      <button class="sec" onclick="resetParaColors()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Task 3: Multiplication table generator -->
+  <div class="card">
+    <div class="task-header">Task 3 · Multiplication table generator</div>
+    <div class="task-body">
+      <div class="row">
+        <input type="number" id="tableNum" placeholder="Enter number" style="max-width:160px; margin-bottom:0"/>
+        <button onclick="genTable()">Generate Table</button>
+      </div>
+      <div class="output-box" id="tableOutput">Table will appear here</div>
+    </div>
+  </div>
+
+  <!-- Task 4: Even numbers 1–20 on webpage -->
+  <div class="card">
+    <div class="task-header">Task 4 · Display even numbers from 1 to 20</div>
+    <div class="task-body">
+      <button onclick="showEvens()">Show Even Numbers</button>
+      <div id="evenOutput" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- Task 5: Counter app -->
+  <div class="card">
+    <div class="task-header">Task 5 · Counter app</div>
+    <div class="task-body">
+      <div id="counterNum">0</div>
+      <button onclick="counterUp()">+ Increase</button>
+      <button class="sec" onclick="counterDown()">− Decrease</button>
+      <button class="danger" onclick="counterReset()">Reset</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     ASSIGNMENT 5 — Student Profile Card
+════════════════════════════════════════ -->
+<div class="assignment">
+  <div class="assignment-title">Assignment 5 — Mini Project: Student Profile Card</div>
+
+  <div class="card">
+    <div class="task-body">
+
+      <!-- Input fields -->
+      <div style="display:grid; gap:10px; max-width:380px;">
+
+        <div>
+          <label style="font-size:0.82rem; color:#888;">Full Name</label>
+          <input type="text" id="pcName" placeholder="e.g. Sara Ahmed"
+            style="max-width:100%; width:100%; display:block; margin-top:3px;"/>
+          <div class="error-msg" id="pcErrName"></div>
+        </div>
+
+        <div>
+          <label style="font-size:0.82rem; color:#888;">Class / Grade</label>
+          <input type="text" id="pcClass" placeholder="e.g. 10th Grade"
+            style="max-width:100%; width:100%; display:block; margin-top:3px;"/>
+          <div class="error-msg" id="pcErrClass"></div>
+        </div>
+
+        <div>
+          <label style="font-size:0.82rem; color:#888;">City</label>
+          <input type="text" id="pcCity" placeholder="e.g. Karachi"
+            style="max-width:100%; width:100%; display:block; margin-top:3px;"/>
+          <div class="error-msg" id="pcErrCity"></div>
+        </div>
+
+        <div>
+          <label style="font-size:0.82rem; color:#888;">Profile Image URL (optional)</label>
+          <input type="url" id="pcImg"
+            placeholder="https://..."
+            oninput="previewProfileImg()"
+            style="max-width:100%; width:100%; display:block; margin-top:3px;"/>
+          <img id="imgPreview" src="" alt="Preview"/>
+        </div>
+
+      </div>
+
+      <div style="margin-top:14px;">
+        <button onclick="createProfile()">Create Profile Card</button>
+        <button class="sec" onclick="resetProfile()">Reset</button>
+      </div>
+
+      <!-- Profile Card Display -->
+      <div id="profileCard">
+        <img id="pcDisplayImg" src="" alt="Profile"/>
+        <div class="pc-name" id="pcDisplayName"></div>
+        <table>
+          <tr><td>Class</td><td id="pcDisplayClass"></td></tr>
+          <tr><td>City</td><td id="pcDisplayCity"></td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+
+/* ── Dark Mode ───────────────────────────── */
+function toggleDark() {
+  document.body.classList.toggle("dark");
+  var btn = document.getElementById("darkBtn");
+  btn.textContent = document.body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
+}
+
+
+/* ── ASSIGNMENT 1 ────────────────────────── */
+
+// Task 1: Change text of all 3 paragraphs
+var textChanged = false;
+function changeAllText() {
+  // Using getElementById for each paragraph — basic beginner approach
+  document.getElementById("p1").textContent = textChanged ? "Paragraph 1 — original text" : "Paragraph 1 — TEXT CHANGED! ✅";
+  document.getElementById("p2").textContent = textChanged ? "Paragraph 2 — original text" : "Paragraph 2 — TEXT CHANGED! ✅";
+  document.getElementById("p3").textContent = textChanged ? "Paragraph 3 — original text" : "Paragraph 3 — TEXT CHANGED! ✅";
+  textChanged = !textChanged;
+}
+
+// Task 2: Change text color of all paragraphs
+var colors = ["#e53935", "#1565c0", "#2e7d32", "#6a1b9a", "#e65100"];
+var colorIndex = 0;
+function changeAllColors() {
+  var paras = [
+    document.getElementById("cp1"),
+    document.getElementById("cp2"),
+    document.getElementById("cp3")
+  ];
+  // Loop through all paragraphs
+  for (var i = 0; i < paras.length; i++) {
+    paras[i].style.color = colors[colorIndex];
+  }
+  colorIndex = (colorIndex + 1) % colors.length;
+}
+function resetColors() {
+  var paras = [
+    document.getElementById("cp1"),
+    document.getElementById("cp2"),
+    document.getElementById("cp3")
+  ];
+  for (var i = 0; i < paras.length; i++) {
+    paras[i].style.color = "";
+  }
+}
+
+// Task 3: Change font size of headings
+var headingSize = 17;
+function changeHeadingSize() {
+  headingSize += 4;
+  var headings = [
+    document.getElementById("h1"),
+    document.getElementById("h2"),
+    document.getElementById("h3")
+  ];
+  for (var i = 0; i < headings.length; i++) {
+    headings[i].style.fontSize = headingSize + "px";
+  }
+}
+function resetHeadingSize() {
+  headingSize = 17;
+  var headings = [
+    document.getElementById("h1"),
+    document.getElementById("h2"),
+    document.getElementById("h3")
+  ];
+  for (var i = 0; i < headings.length; i++) {
+    headings[i].style.fontSize = "";
+  }
+}
+
+// Task 4: Show current date and time
+function showDateTime() {
+  var now = new Date();
+  var dateStr = now.toDateString();
+  var timeStr = now.toLocaleTimeString();
+  document.getElementById("dateTimeOut").textContent = "📅 Date: " + dateStr + "  |  🕐 Time: " + timeStr;
+}
+
+// Task 5: Toggle paragraph
+function togglePara5() {
+  var p = document.getElementById("toggleP");
+  p.style.display = (p.style.display === "none") ? "block" : "none";
+}
+
+
+/* ── ASSIGNMENT 2 ────────────────────────── */
+
+// Task 1: Change main image on button click
+var imgSeeds = ["nature", "animals", "architecture", "food"];
+var imgIndex = 0;
+function changeImage() {
+  imgIndex = (imgIndex + 1) % imgSeeds.length;
+  document.getElementById("mainImg").src = "https://picsum.photos/seed/" + imgSeeds[imgIndex] + "/300/200";
+  document.getElementById("imgMsg").textContent = "Image " + (imgIndex + 1) + " of " + imgSeeds.length;
+}
+
+// Task 4: Thumbnail preview
+function previewThumb(clickedThumb, label) {
+  // Remove active from all thumbs
+  var thumbs = document.getElementsByClassName("thumb");
+  for (var i = 0; i < thumbs.length; i++) {
+    thumbs[i].classList.remove("active");
+  }
+  clickedThumb.classList.add("active");
+
+  var preview = document.getElementById("largePreview");
+  preview.src = clickedThumb.src;
+  preview.style.display = "block";
+  document.getElementById("previewLabel").textContent = "Showing: " + label;
+}
+
+// Task 5: Image slider
+var slides = ["slide1", "slide2", "slide3", "slide4", "slide5"];
+var slideIdx = 0;
+function nextSlide() {
+  slideIdx = (slideIdx + 1) % slides.length;
+  updateSlider();
+}
+function prevSlide() {
+  slideIdx = (slideIdx - 1 + slides.length) % slides.length;
+  updateSlider();
+}
+function updateSlider() {
+  document.getElementById("sliderImg").src = "https://picsum.photos/seed/" + slides[slideIdx] + "/400/300";
+  document.getElementById("slideLabel").textContent = "Slide " + (slideIdx + 1) + " / " + slides.length;
+}
+
+
+/* ── ASSIGNMENT 3 ────────────────────────── */
+
+// Task 1: Live text display
+function showLive() {
+  var text = document.getElementById("liveIn").value;
+  document.getElementById("liveOut").textContent = text || "Your text appears here in real time...";
+}
+
+// Task 2: Password strength checker
+function checkStrength() {
+  var pwd = document.getElementById("pwdStrIn").value;
+  var el  = document.getElementById("pwdStrength");
+  if (pwd.length === 0) {
+    el.textContent = "Strength will show here";
+    el.className   = "";
+  } else if (pwd.length < 8) {
+    el.textContent = "⚠️ Weak Password (less than 8 characters)";
+    el.className   = "weak";
+  } else {
+    el.textContent = "✅ Strong Password (8 or more characters)";
+    el.className   = "strong";
+  }
+}
+
+// Task 3: Login validation
+function validateLogin() {
+  var user = document.getElementById("loginU").value.trim();
+  var pass = document.getElementById("loginP").value.trim();
+  var ok = true;
+
+  document.getElementById("errU").textContent = "";
+  document.getElementById("errP").textContent = "";
+
+  if (user === "") {
+    document.getElementById("errU").textContent = "Username is required!";
+    ok = false;
+  }
+  if (pass === "") {
+    document.getElementById("errP").textContent = "Password is required!";
+    ok = false;
+  }
+
+  var msg = document.getElementById("loginMsg");
+  msg.style.display = "block";
+  if (ok) {
+    msg.textContent   = "✅ Login successful! Welcome, " + user + "!";
+    msg.style.color   = "#2e7d32";
+  } else {
+    msg.textContent   = "❌ Please fill in all fields.";
+    msg.style.color   = "#c62828";
+  }
+}
+
+// Task 4: Show / Hide password
+function toggleShowPwd() {
+  var input = document.getElementById("showPwd");
+  var check = document.getElementById("showPwdCheck");
+  input.type = check.checked ? "text" : "password";
+}
+
+// Task 5: Reset form fields
+function resetForm3() {
+  document.getElementById("rf1").value = "";
+  document.getElementById("rf2").value = "";
+  document.getElementById("rf3").value = "";
+}
+
+
+/* ── ASSIGNMENT 4 ────────────────────────── */
+
+// Task 1: Create 5 paragraphs using loop
+function createParas() {
+  var container = document.getElementById("loopParaContainer");
+  container.innerHTML = ""; // clear first
+  for (var i = 1; i <= 5; i++) {
+    var p = document.createElement("p");
+    p.className   = "loop-para";
+    p.textContent = "Paragraph " + i + " — Number: " + i;
+    container.appendChild(p);
+  }
+}
+
+// Task 2: Color paragraphs using loop
+var paraColors = ["#ffcdd2", "#bbdefb", "#c8e6c9", "#fff9c4", "#e1bee7"];
+function colorParas() {
+  var paras = document.getElementsByClassName("loop-para");
+  for (var i = 0; i < paras.length; i++) {
+    paras[i].style.background = paraColors[i % paraColors.length];
+    paras[i].style.color      = "#333";
+  }
+}
+function resetParaColors() {
+  var paras = document.getElementsByClassName("loop-para");
+  for (var i = 0; i < paras.length; i++) {
+    paras[i].style.background = "";
+    paras[i].style.color      = "";
+  }
+}
+
+// Task 3: Multiplication table generator
+function genTable() {
+  var n = Number(document.getElementById("tableNum").value);
+  if (!n) {
+    document.getElementById("tableOutput").textContent = "Please enter a number first!";
+    return;
+  }
+  var output = "";
+  for (var i = 1; i <= 10; i++) {
+    output += n + " × " + i + " = " + (n * i) + "\n";
+  }
+  document.getElementById("tableOutput").textContent = output;
+}
+
+// Task 4: Show even numbers 1–20
+function showEvens() {
+  var container = document.getElementById("evenOutput");
+  container.innerHTML = "";
+  for (var i = 1; i <= 20; i++) {
+    if (i % 2 === 0) {
+      var span = document.createElement("span");
+      span.className   = "even-badge";
+      span.textContent = i;
+      container.appendChild(span);
+    }
+  }
+}
+
+// Task 5: Counter app
+var count = 0;
+function counterUp() {
+  count++;
+  document.getElementById("counterNum").textContent = count;
+}
+function counterDown() {
+  count--;
+  document.getElementById("counterNum").textContent = count;
+}
+function counterReset() {
+  count = 0;
+  document.getElementById("counterNum").textContent = count;
+}
+
+
+/* ── ASSIGNMENT 5 ────────────────────────── */
+
+// Function 1: Validate profile form — returns true if valid
+function validateProfile() {
+  var isValid = true;
+
+  // Array of fields to validate (uses a loop — Assignment requirement)
+  var fields = [
+    { id: "pcName",  errId: "pcErrName",  label: "Name"  },
+    { id: "pcClass", errId: "pcErrClass", label: "Class" },
+    { id: "pcCity",  errId: "pcErrCity",  label: "City"  }
+  ];
+
+  // Clear old errors first
+  for (var i = 0; i < fields.length; i++) {
+    document.getElementById(fields[i].errId).textContent = "";
+  }
+
+  // Validate each field
+  for (var i = 0; i < fields.length; i++) {
+    var val = document.getElementById(fields[i].id).value.trim();
+    if (val === "") {
+      document.getElementById(fields[i].errId).textContent = fields[i].label + " is required!";
+      isValid = false;
+    }
+  }
+
+  return isValid;
+}
+
+// Function 2: Create and display the profile card
+function createProfile() {
+  if (!validateProfile()) return;
+
+  var name  = document.getElementById("pcName").value.trim();
+  var cls   = document.getElementById("pcClass").value.trim();
+  var city  = document.getElementById("pcCity").value.trim();
+  var imgUrl = document.getElementById("pcImg").value.trim();
+
+  // Default avatar if no image provided
+  if (imgUrl === "") {
+    imgUrl = "https://ui-avatars.com/api/?name=" + encodeURIComponent(name) + "&background=1a6e5a&color=fff&size=128";
+  }
+
+  document.getElementById("pcDisplayImg").src      = imgUrl;
+  document.getElementById("pcDisplayName").textContent  = name;
+  document.getElementById("pcDisplayClass").textContent = cls;
+  document.getElementById("pcDisplayCity").textContent  = city;
+  document.getElementById("profileCard").style.display  = "block";
+}
+
+// Image preview (bonus)
+function previewProfileImg() {
+  var url = document.getElementById("pcImg").value.trim();
+  var preview = document.getElementById("imgPreview");
+  if (url) {
+    preview.src           = url;
+    preview.style.display = "block";
+  } else {
+    preview.style.display = "none";
+  }
+}
+
+// Reset profile form
+function resetProfile() {
+  document.getElementById("pcName").value  = "";
+  document.getElementById("pcClass").value = "";
+  document.getElementById("pcCity").value  = "";
+  document.getElementById("pcImg").value   = "";
+  document.getElementById("imgPreview").style.display  = "none";
+  document.getElementById("profileCard").style.display = "none";
+  document.getElementById("pcErrName").textContent  = "";
+  document.getElementById("pcErrClass").textContent = "";
+  document.getElementById("pcErrCity").textContent  = "";
+}
+
+</script>
+</body>
+</html>
